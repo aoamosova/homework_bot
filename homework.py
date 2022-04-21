@@ -92,7 +92,7 @@ def main():
         logging.critical(error, exc_info=True)
         sys.exit
     bot = telegram.Bot(token=TELEGRAM_TOKEN)
-    current_timestamp = int(time.time() - 30 * 24 * 60 * 60)
+    current_timestamp = int(time.time())
     status = ''
     while check_tokens() is True:
         try:
