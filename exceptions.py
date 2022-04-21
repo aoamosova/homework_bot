@@ -4,3 +4,7 @@ class MissingDataException(Exception):
 
 class EmptyValueException(Exception):
     pass
+
+
+class StatusCodeException(Exception):
+    pass

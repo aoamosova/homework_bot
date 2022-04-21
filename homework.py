@@ -2,12 +2,14 @@ import logging
 import os
 import sys
 import time
+from http import HTTPStatus
 
 import requests
 import telegram
 from dotenv import load_dotenv
 
-from exceptions import EmptyValueException, MissingDataException
+from exceptions import (EmptyValueException, MissingDataException,
+                        StatusCodeException)
 from settings import ENDPOINT, HOMEWORK_STATUSES, RETRY_TIME
 
 load_dotenv()
@@ -41,6 +43,8 @@ def get_api_answer(current_timestamp):
         response = requests.get(ENDPOINT, headers=HEADERS, params=params)
     except Exception as error:
         logging.error(f'Ошибка при запросе к основному API: {error}')
+    if response.status_code != HTTPStatus.OK:
+        raise StatusCodeException('Ошибка при запросе к основному API')
     try:
         return response.json()
     except Exception as error:
@@ -49,6 +53,9 @@ def get_api_answer(current_timestamp):
 
 def check_response(response):
     """Проверяем данные в ответе."""
+    if type(response) != dict:
+        error = 'Тип ответа не словарь'
+        raise TypeError(error)
     if 'homeworks' not in response:
         error = f'Отсутствуют данные в:{response}'
         raise MissingDataException(error)
@@ -57,7 +64,7 @@ def check_response(response):
         error = 'Тип ответа не список'
         raise TypeError(error)
     if not homework:
-        error = f'Список {homework} пуст'
+        error = 'Список работ пуст'
         raise EmptyValueException(error)
     logging.info('Статус домашнего задания обновлен')
     return homework[0]
