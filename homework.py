@@ -8,8 +8,7 @@ import requests
 import telegram
 from dotenv import load_dotenv
 
-from exceptions import (EmptyValueException, MissingDataException,
-                        StatusCodeException)
+from exceptions import MissingDataException, StatusCodeException
 from settings import ENDPOINT, HOMEWORK_STATUSES, RETRY_TIME
 
 load_dotenv()
@@ -63,9 +62,6 @@ def check_response(response):
     if type(homework) != list:
         error = 'Тип ответа не список'
         raise TypeError(error)
-    if not homework:
-        error = 'Список работ пуст'
-        raise EmptyValueException(error)
     logging.info('Статус домашнего задания обновлен')
     return homework[0]
 
