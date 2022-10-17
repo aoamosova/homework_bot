@@ -47,11 +47,6 @@ pip install -r requirements.txt
 - токен телеграм-бота
 - свой ID в телеграме
 
-Выполнить миграции:
-
-```
-python manage.py migrate
-```
 
 Запустить проект:
 
